@@ -3,20 +3,30 @@ Arquitetura de Exemplo com Componentes GCP
 A imagem abaixo ilustra uma arquitetura de exemplo com alguns componentes do Google Cloud Platform, incluindo:
 
 Compute Engine: Para hospedar servidores web.
+
 Cloud SQL: Para armazenar dados de um banco de dados relacional.
+
 Cloud Storage: Para armazenar arquivos estáticos e backups.
+
 Cloud Run: Para executar uma API REST com contêineres Docker.
+
 Cloud Pub/Sub: Para comunicar o serviço web com o serviço de análise de dados.
+
 Cloud Dataflow: Para processar dados em tempo real do serviço de análise.
+
 Cloud Monitoring: Para monitorar o desempenho dos serviços.
 
 
 Descrição da Arquitetura:
 
 Serviço Web: A aplicação web é hospedada em instâncias do Compute Engine e utiliza Cloud SQL para armazenar dados do banco de dados relacional. Os arquivos estáticos da aplicação são armazenados no Cloud Storage.
+
 API REST: A API REST é implementada com contêineres Docker e executada no Cloud Run, garantindo escalabilidade e alta disponibilidade.
+
 Mensageria: O serviço web envia mensagens para o Cloud Pub/Sub para notificar o serviço de análise de dados sobre novos eventos ou dados.
+
 Análise de Dados: O serviço de análise de dados recebe mensagens do Cloud Pub/Sub e processa os dados em tempo real usando o Cloud Dataflow.
+
 Monitoramento: O Cloud Monitoring é usado para monitorar o desempenho de todos os serviços, coletando métricas, logs e traces para identificar problemas e garantir a saúde da aplicação.
 
 Observações:
