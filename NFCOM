@@ -1,0 +1,60 @@
+Arquitetura Proposta para um projeto de Nota Fiscal de TELECOM:
+
+1. Integração com Faturadores On-Premise:
+Faturadores On-Premise: 5 faturadores em banco de dados Oracle 19.
+Dataflow: Utilizar o Dataflow para extrair dados das views dos faturadores on-premise, transformá-los no formato desejado e carregar no Cloud Spanner.
+
+2. Banco de Dados NoSQL (GCP):
+Cloud Spanner: Utilizado como único banco de dados para armazenar todas as notas fiscais.
+
+3. Mensageria com o Fornecedor (AWS):
+Cloud Spanner: Utilizar o conector JDBC para acessar o Cloud Spanner diretamente do serviço de mensageria na AWS.
+
+4. Integração com a SEFAZ:
+SaaS do Fornecedor: Utilizar o serviço SaaS contratado com o fornecedor para enviar as notas fiscais para a SEFAZ.
+
+5. Front-end (React/Angular):
+Cloud Run: Hospedar o front-end React/Angular em um ambiente escalável e gerenciado com o Cloud Run.
+Cloud Storage: Armazenar arquivos estáticos do front-end no Cloud Storage.
+Cloud CDN: Utilizar o Cloud CDN para distribuir os arquivos estáticos do front-end globalmente, minimizando a latência para os usuários.
+Dashboard Interativo: O front-end apresentará um dashboard interativo para monitorar o fluxo das notas fiscais, desde a geração pelos faturadores até a aprovação ou rejeição da SEFAZ.
+
+6. Segurança:
+IAM: Utilizar o IAM para controlar o acesso aos recursos da GCP, como Cloud Spanner, Cloud Functions e Cloud Storage.
+Criptografia de Dados: Criptografar os dados sensíveis no Cloud Spanner utilizando chaves gerenciadas pelo Cloud KMS.
+Cloud Armor: Utilizar o Cloud Armor para proteger o front-end contra ataques DDoS e outras ameaças.
+Cloud Logging: Monitorar logs de segurança para identificar atividades suspeitas e auditar o acesso aos dados.
+
+7. Monitoramento e Monitoramento:
+Cloud Monitoring: Utilizar o Cloud Monitoring para monitorar o desempenho, a disponibilidade e a segurança dos serviços da GCP. Configurar alertas para eventos críticos.
+Cloud Logging: Utilizar o Cloud Logging para coletar logs de diferentes serviços da GCP, como Cloud Spanner, Cloud Functions e Cloud Storage. Esses logs podem ser usados para monitorar e analisar o fluxo de dados, identificar erros e solucionar problemas.
+Cloud Tracing: Utilizar o Cloud Tracing para monitorar o desempenho das requisições HTTP, identificando gargalos e otimizando o tempo de resposta.
+
+Considerando alto volume de dados, optei por utilizar o Cloud Pub/Sub para a conexão com o Front-end to Backend, seguinto estes quesitos:
+
+1. Alto Volume de Dados:
+Mensageria Assíncrona: O Cloud Pub/Sub é um serviço de mensageria assíncrona, que permite que você envie mensagens para um tópico e os consumidores se inscrevam nesse tópico para receber as mensagens. Isso permite lidar com volumes massivos de dados, pois as mensagens são processadas de forma distribuída.
+Escalabilidade Horizontal: O Cloud Pub/Sub é escalável horizontalmente, garantindo que ele possa lidar com grandes volumes de mensagens sem comprometer o desempenho.
+
+2. Latência:
+Mensageria de Baixa Latência: O Cloud Pub/Sub é projetado para garantir baixa latência na entrega de mensagens, ideal para cenários em tempo real.
+
+3. Escalabilidade:
+Escalabilidade Automática: O Cloud Pub/Sub escala automaticamente para lidar com picos de demanda, garantindo que o sistema permaneça estável e responsivo.
+
+4. Performance:
+Mensageria Otimizada para Desempenho: O Cloud Pub/Sub é otimizado para garantir a alta performance, com taxas de transferência de mensagens extremamente altas.
+
+5. Integração com o Cloud Spanner:
+Conexão Direta: O Cloud Spanner possui um conector nativo para o Cloud Pub/Sub, permitindo uma integração direta e eficiente.
+
+Como Funciona na Arquitetura:
+Cloud Spanner: As notas fiscais inseridas no Cloud Spanner podem ser enviadas para um tópico do Cloud Pub/Sub.
+Cloud Pub/Sub: O serviço de mensageria do fornecedor pode se conectar ao tópico do Cloud Pub/Sub e consumir as mensagens com as notas fiscais, em tempo real.
+
+Benefícios:
+Desacoplamento de Serviços: Permite que o Cloud Spanner e o serviço de mensageria da AWS operem de forma independente, desacoplando os serviços e simplificando a comunicação.
+Escalabilidade e Alta Disponibilidade: Garante a escalabilidade e a alta disponibilidade do sistema de mensagens, mesmo com grandes volumes de dados.
+Eficiência: O Cloud Pub/Sub é um serviço otimizado para alto volume de dados, garantindo desempenho e latência adequados.
+
+Em resumo: O Cloud Pub/Sub é a solução ideal para o envio e recebimento de dados entre o Cloud Spanner e o serviço de mensageria na AWS, garantindo a escalabilidade, a alta disponibilidade e a performance necessárias para lidar com o grande volume de notas fiscais do projeto NFCOM.
